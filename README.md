@@ -20,7 +20,7 @@ OMT Diagram:
 	Our OMT diagram shows how we build composite pattern using multiple classes
 inherited from base class
 
-	Path: Images/
+	Path: https://github.com/cs100/assignment-a1w_alums/blob/master/Images/Assignment%201%20UML.png?raw=true
 
 Classes: 
 	

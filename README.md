@@ -1,22 +1,20 @@
 # CS 100 Programming Project
-##Ryan Lam, 862110744	                                                                                            		
+*Ryan Lam, 862110744	                                                                                            		
+*Xiaotian Ma, 862094705                                                            						
+*CS100 Brian Crites - Fall 2019
 
-##Xiaotian Ma, 862094705                                                            						
-
-##CS100 Brian Crites - Fall 2019
-
-######*Introduction:*
+**Introduction:**
 
 *We are currently using a composite design pattern to design our shell. Our project design consists of 6 classes which inherit from an interface in order to execute certain commands and functions. From our Base interface, we have two classes Connector and Command which allow for command execution based on the arguments and executables. From our connector class we have an AND, OR, and SEMICOLON class which are used to differentiate between single and several command executions. Furthermore, our EXIT class inherits from our Command class in order to follow specific procedures before exiting our shell
 
 
-######*OMT Diagram:*
+**OMT Diagram:**
 	
 *Our OMT diagram shows how we build composite pattern using multiple classes inherited from base class
 
 ![OMT Diagram](https://github.com/cs100/assignment-a1w_alums/blob/master/Images/Assignment%201%20UML.png?raw=true)
 
-######*Classes:*
+**Classes:**
 	
 1.*Base:*
 *Our Base class consists of a virtual execute function that will be inherited by all of our other classes. It will be used in order to support both connector and command execute functions. 
@@ -37,7 +35,7 @@
 
  *Furthermore, our EXIT class will contain procedures among execution that will ensure that the command queue is empty and that there are no other commands being prompted after it. Shortly afterward, the command will execute and exit the shell. 
 
-######*Prototype*
+**Prototype**
 
 *Our prototype folder contains two parts, prototype functions to test execvp(), fork(), and waitpid(), and parser class to output a vector of  commands and connectors, ex: {command1, connector, command2, etc}. Commands and connectors are implemented as arrays of c-string. One single command could be {“ls”, ”-a”, “-l”}. Connector are implemented such as {“;”}, which only contain one string of connector. 
 
@@ -46,7 +44,7 @@
 *See Code here: [parser header](prototype/parser.h), [parser class implementation](prototype/parser.cpp), [prototype test](prototype/prototype_tests.cpp)
 
 
-######*Development and Testing Roadmap*
+**Development and Testing Roadmap**
 
 1.Base Class                                 					@maxt0214
 2.CMD Class(concurrently with connector)					@maxt0214

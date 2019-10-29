@@ -1,6 +1,6 @@
 # CS 100 Programming Project
-Ryan Lam, 862110744                                                                                            
-Xiaotian Ma, 862094705                                                            				
+Ryan Lam, 862110744	                                                                                            				
+Xiaotian Ma, 862094705                                                            								
 CS100 Brian Crites - Fall 2019
 
 Introduction:

@@ -37,13 +37,169 @@
 
 **Prototype**
 
-  - Our prototype folder contains two parts, prototype functions to test execvp(), fork(), and waitpid(), and parser class to output a vector of  commands and connectors, ex: {command1, connector, command2, etc}. Commands and connectors are implemented as arrays of c-string. One single command could be {“ls”, ”-a”, “-l”}. Connector are implemented such as {“;”}, which only contain one string of connector. 
+- Our prototype folder contains two parts, prototype functions to test execvp(), fork(), and waitpid(), and parser class to output a vector of  commands and connectors, ex: {command1, connector, command2, etc}. Commands and connectors are implemented as arrays of c-string. One single command could be {“ls”, ”-a”, “-l”}. Connector are implemented such as {“;”}, which only contain one string of connector. 
 
-  - For the part how we could distinguish between multiple commands in one line or single command in one line, the returned vector of c-string arrays would only contain one array if the user only input single command, and vice versa. 
+- For the part how we could distinguish between multiple commands in one line or single command in one line, the returned vector of c-string arrays would only contain one array if the user only input single command, and vice versa. 
 
-  - See Code here: [parser header](prototype/parser.h), [parser class implementation](prototype/parser.cpp), [prototype test](prototype/prototype_tests.cpp)
+- parser header:
+```c++
+class parser {
+	private:
+        	unsigned currLoc;
+        	std::string user_input;
+    	public:
+        	parser(std::string user_input) { this->currLoc = 0; this->user_input = user_input; }
+        	std::vector<char**> parse();
+    	public:
+        	char** buildSingleCommand(unsigned pre);
+};
+```
+- parser implementation:
+```c++
+#include "parser.h"
 
+#include <vector>
+#include <string>
+#include <cstring>
+#include <iostream>
 
+using namespace std;
+
+std::vector<char**> parser::parse() {
+    std::vector<char**> commands;
+    unsigned pre = 0;
+    
+    /*
+        Goal: Build a vector of commands and connectors. Ex: {"command 1", "connector", "command2", etc}
+        
+        > find the connector
+        > use buildSingleCommand to build command in the range of pre and curr, and push it to commands
+        > build a array of connector cstring and push to commands
+        > set pre to curr
+        > if reach end of user input, build the last command using pre and curr, and push
+    */
+    
+    while(currLoc < user_input.size()) {
+        //connector ;
+        if(user_input.at(currLoc) == ';') { 
+            
+            commands.push_back(buildSingleCommand(pre));
+            //build a cstring of simcolon {';' , '\0'}
+            char* simcolonChar = new char[2];
+            simcolonChar[0] = user_input.at(currLoc);
+            simcolonChar[1] = '\0';
+            currLoc ++; //move to next
+            //build a array of simcolon string {';' , NULL}
+            char** simcolon = new char*[2];
+            simcolon[0] = simcolonChar;
+            simcolon[1] = NULL;
+            commands.push_back(simcolon);
+            //set pre to curr
+            pre = currLoc;
+        } 
+        //connector && or ||
+        if( (user_input.at(currLoc) == '&' && user_input.at(currLoc+1) == '&') || 
+            (user_input.at(currLoc) == '|' && user_input.at(currLoc+1) == '|') ) { 
+            
+            commands.push_back(buildSingleCommand(pre));
+            //build a cstring of simcolon {'&', '&', '\0'}
+            char* AndOrString = new char[3];
+            AndOrString[0] = user_input.at(currLoc);
+            AndOrString[1] = user_input.at(currLoc+1);
+            currLoc += 2; //move to next char because we append 2 chars
+            AndOrString[2] = '\0';
+            //build a array of simcolon string {'||' , NULL}
+            char** AndOr = new char*[2];
+            AndOr[0] = AndOrString;
+            AndOr[1] = NULL;
+            commands.push_back(AndOr);
+            //set pre to curr
+            pre = currLoc;
+        }
+        if(currLoc + 1 == user_input.size()) { //reach the end, build last command
+            //adding one so buildSingleCommand can get whole command(currLoc points to the last char of command, which won't be visited)
+            currLoc ++; 
+            commands.push_back(buildSingleCommand(pre));
+        }
+        
+        currLoc ++;//move to next char
+    }
+    
+    return commands;
+}
+
+char** parser::buildSingleCommand(unsigned pre) {
+    char** command = new char*[50];
+    unsigned commandIndex = 0;
+    char* input = new char[50];
+    unsigned counter = 0;
+    
+    for(unsigned i = pre; i < currLoc && user_input.at(i) != '\0'; i++) {
+        input[counter] = user_input.at(i);
+        counter ++;
+    }
+    input[counter] = '\0';
+    
+    char* parsed = new char[50];
+    parsed = strtok(input," ");
+    while(parsed != NULL) {
+        command[commandIndex] = parsed;
+        commandIndex ++;
+        
+        parsed = strtok(NULL," ");
+    }
+    command[commandIndex] = NULL;
+    
+    return command;
+}
+```
+- prototype test
+```c++
+#include <iostream>
+
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdio.h>
+
+using namespace std;
+
+#include "parser.h"
+
+//Tests for waitpid(), execvp() and fork()
+void exeCommand(char** command) {
+    pid_t c_pid;
+    int status;
+    
+    c_pid = fork();
+    
+    if(c_pid == 0) { //child process
+        execvp(command[0],command);
+        cout << "Execute command failed." << endl;
+    } else if(c_pid > 0) { //parent process
+        waitpid(c_pid, &status, WUNTRACED);
+    } else { //fork failed
+        cout << "Fork failed." << endl;
+    }
+}
+
+int main() {
+    parser userCommand("ls -a -l");
+    
+    char** args = userCommand.parse().at(0);
+    
+    int i = 0;
+    
+    while(args[i] != NULL) {
+        cout << args[i] << " ";
+        i ++;
+    }
+    cout << endl;
+    
+    exeCommand(args);
+    
+    return 0;
+}
+```
 **Development and Testing Roadmap**
 
 1. [ ] Base Class                                 					@maxt0214

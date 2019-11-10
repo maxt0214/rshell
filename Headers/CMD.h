@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 class Command : public Base {
-    private:
+    protected:
         char** command;
     public:
         Command(char** user_Command);

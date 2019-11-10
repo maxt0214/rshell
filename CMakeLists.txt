@@ -9,11 +9,12 @@ ADD_EXECUTABLE(prototype_test
     prototype/prototype_tests.cpp
 )
 
-ADD_EXECUTABLE(Command_unit_test
+ADD_EXECUTABLE(Unit_test
     prototype/parser.cpp
     Source/CMD.cpp
-    Unit-Tests/CMD_Unit_Test.cpp
+    Source/Exit.cpp
+    Unit-Tests/Unit_Test.cpp
 )
 
-TARGET_LINK_LIBRARIES(Command_unit_test gtest)
-TARGET_COMPILE_DEFINITIONS(Command_unit_test PRIVATE gtest_disable_pthreads=ON)
+TARGET_LINK_LIBRARIES(Unit_test gtest)
+TARGET_COMPILE_DEFINITIONS(Unit_test PRIVATE gtest_disable_pthreads=ON)

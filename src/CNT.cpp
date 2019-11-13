@@ -1,4 +1,4 @@
-#include "../headers/CNT.h"
+#include "../header/CNT.h"
 
 Connecter::Connector(Base* leftChild, Base* rightChild){
 

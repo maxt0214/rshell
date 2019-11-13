@@ -7,14 +7,14 @@
 #include <stdio.h>
 
 
-class Connector : public Base {
+class Connecter : public Base {
 
-	protected:
+	private:
 		Base* childLeft;
 		Base* childRight;
 
 	public:
-		Connector(Base* leftChild, Base* rightChild);
+		Connecter(Base* leftChild, Base* rightChild);
 		virtual pid_t Execute() = 0;
 
 };

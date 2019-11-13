@@ -1,6 +1,10 @@
-#include "../header/CNT.h"
+#include "Documents/GitHub/assignment-a1w_alums/Headers/CNT.h"
 
-Connector::Connector(Base* leftChild, Base* rightChild){
-	childLeft = leftChild;
-	childRight = rightChild;
+Connecter::Connector(Base* leftChild, Base* rightChild){
+
+		childLeft = leftChild;
+		childRight = rightChild;
+
 }
+
+

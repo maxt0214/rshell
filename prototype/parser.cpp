@@ -22,6 +22,11 @@ std::vector<char**> parser::parse() {
     */
     
     while(currLoc < user_input.size()) {
+        //comments
+        if(user_input.at(currLoc) == '#') {
+            commands.push_back(buildSingleCommand(pre));
+            return commands;
+        }
         //connector ;
         if(user_input.at(currLoc) == ';') { 
             

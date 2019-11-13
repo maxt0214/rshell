@@ -1,6 +1,7 @@
 #include "../header/CNT.h"
+#include "../header/Base.hpp"
 
-Connecter::Connector(Base* leftChild, Base* rightChild){
+Connector::Connector(Base* leftChild, Base* rightChild){
 
 		childLeft = leftChild;
 		childRight = rightChild;

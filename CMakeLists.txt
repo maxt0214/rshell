@@ -4,17 +4,27 @@ ADD_SUBDIRECTORY(googletest)
 
 SET(CMAKE_CXX_STANDARD 11)
 
-ADD_EXECUTABLE(prototype_test
+ADD_EXECUTABLE(test
     prototype/parser.cpp
-    prototype/prototype_tests.cpp
+    src/CNT.cpp
+    src/SEMI.cpp
+    src/OR.cpp
+    src/AND.cpp
+    src/CMD.cpp
+    src/Exit.cpp
+    unit_tests/Unit_Test.cpp
 )
 
-ADD_EXECUTABLE(Unit_test
+ADD_EXECUTABLE(rshell
     prototype/parser.cpp
-    Source/CMD.cpp
-    Source/Exit.cpp
-    Unit-Tests/Unit_Test.cpp
+    src/CNT.cpp
+    src/SEMI.cpp
+    src/OR.cpp
+    src/AND.cpp
+    src/CMD.cpp
+    src/Exit.cpp
+    src/main.cpp
 )
 
-TARGET_LINK_LIBRARIES(Unit_test gtest)
-TARGET_COMPILE_DEFINITIONS(Unit_test PRIVATE gtest_disable_pthreads=ON)
+TARGET_LINK_LIBRARIES(test gtest)
+TARGET_COMPILE_DEFINITIONS(test PRIVATE gtest_disable_pthreads=ON)

@@ -108,7 +108,7 @@ std::vector<char**> parser::parse() {
 }
 
 char** parser::buildSingleCommand(string singleCommand) {
-    char** command = new char*[50];
+    char** command = new char*[20];
     unsigned commandIndex = 0;
     
     char* input = new char[100];
@@ -120,8 +120,7 @@ char** parser::buildSingleCommand(string singleCommand) {
     }
     input[counter] = '\0';
     
-    char* parsed = new char[100];
-    parsed = strtok(input," ");
+    char* parsed = strtok(input," ");
     while(parsed != NULL) {
         command[commandIndex] = parsed;
         commandIndex ++;

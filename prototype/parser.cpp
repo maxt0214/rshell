@@ -10,6 +10,7 @@ using namespace std;
 std::vector<char**> parser::parse() {
     std::vector<char**> commands;
     unsigned pre = 0;
+    string previousCommand;
     
     /*
         Goal: Build a vector of commands and connectors. Ex: {"command 1", "connector", "command2", etc}
@@ -22,72 +23,104 @@ std::vector<char**> parser::parse() {
     */
     
     while(currLoc < user_input.size()) {
-        //comments
-        if(user_input.at(currLoc) == '#') {
-            commands.push_back(buildSingleCommand(pre));
+        
+        if(user_input.at(currLoc) == '#') { //comments
+            //push back the previous command
+            previousCommand = user_input.substr(pre, currLoc - pre);
+            if(previousCommand.size() != 0 && previousCommand != " ") {
+                commands.push_back(buildSingleCommand(previousCommand));
+            }
             return commands;
         }
-        //connector ;
-        if(user_input.at(currLoc) == ';') { 
+        
+        if(user_input.at(currLoc) == ';' || user_input.at(currLoc) == '(' || user_input.at(currLoc) == ')' || 
+           user_input.at(currLoc) == '[' || user_input.at(currLoc) == ']') { //connector ; ( ) or test command []
             
-            commands.push_back(buildSingleCommand(pre));
-            //build a cstring of simcolon {';' , '\0'}
-            char* simcolonChar = new char[2];
-            simcolonChar[0] = user_input.at(currLoc);
-            simcolonChar[1] = '\0';
-            currLoc ++; //move to next
-            //build a array of simcolon string {';' , NULL}
-            char** simcolon = new char*[2];
-            simcolon[0] = simcolonChar;
-            simcolon[1] = NULL;
-            commands.push_back(simcolon);
-            //set pre to curr
+            //push back the previous command
+            previousCommand = user_input.substr(pre, currLoc - pre);
+            if(previousCommand.size() != 0 && previousCommand != " ") {
+                commands.push_back(buildSingleCommand(previousCommand));
+            }
+            //move two counters: now pre should be pointing to ;()[] and currLoc should point to the one next to ;()[]
             pre = currLoc;
-        } 
-        //connector && or ||
-        if( (user_input.at(currLoc) == '&' && user_input.at(currLoc+1) == '&') || 
-            (user_input.at(currLoc) == '|' && user_input.at(currLoc+1) == '|') ) { 
-            
-            commands.push_back(buildSingleCommand(pre));
-            //build a cstring of simcolon {'&', '&', '\0'}
-            char* AndOrString = new char[3];
-            AndOrString[0] = user_input.at(currLoc);
-            AndOrString[1] = user_input.at(currLoc+1);
-            currLoc += 2; //move to next char because we append 2 chars
-            AndOrString[2] = '\0';
-            //build a array of simcolon string {'||' , NULL}
-            char** AndOr = new char*[2];
-            AndOr[0] = AndOrString;
-            AndOr[1] = NULL;
-            commands.push_back(AndOr);
-            //set pre to curr
-            pre = currLoc;
-        }
-        if(currLoc + 1 == user_input.size()) { //reach the end, build last command
-            //adding one so buildSingleCommand can get whole command(currLoc points to the last char of command, which won't be visited)
-            currLoc ++; 
-            commands.push_back(buildSingleCommand(pre));
+            currLoc ++;
+            //push back ';'
+            previousCommand = user_input.substr(pre, currLoc - pre);
+            commands.push_back(buildSingleCommand(previousCommand));
+            //now pre should point to the one next to ;()[], which is currLoc
+            pre ++;
+            currLoc --;
         }
         
-        currLoc ++;//move to next char
+        if(currLoc + 1 < user_input.size()) {//check if out of bound
+            if( (user_input.at(currLoc) == '&' && user_input.at(currLoc+1) == '&') ||
+                (user_input.at(currLoc) == '|' && user_input.at(currLoc+1) == '|') ) { //connector && or ||
+           
+                //push back the previous command
+                previousCommand = user_input.substr(pre, currLoc - pre);
+                if(previousCommand.size() != 0 && previousCommand != " ") {
+                    commands.push_back(buildSingleCommand(previousCommand));
+                }
+                //move two counters: now pre should be pointing to first & and currLoc should point to the one next to &&
+                pre = currLoc;
+                currLoc += 2;
+                //push back &&
+                previousCommand = user_input.substr(pre, currLoc - pre);
+                commands.push_back(buildSingleCommand(previousCommand));
+                //now pre should point to the one next to &&, which is currLoc
+                pre += 2;
+                currLoc --;
+            }
+        }
+        
+        if(currLoc + 3 < user_input.size()) {//check if out of bound
+            if(user_input.at(currLoc) == 't' && user_input.at(currLoc+1) == 'e' &&
+               user_input.at(currLoc+2) == 's' && user_input.at(currLoc+3) == 't') { //command test
+           
+                //push back the previous command
+                previousCommand = user_input.substr(pre, currLoc - pre);
+                if(previousCommand.size() != 0 && previousCommand != " ") {
+                    commands.push_back(buildSingleCommand(previousCommand));
+                }
+                //move two counters: now pre should be pointing to first t and currLoc should point to the one next to test
+                pre = currLoc;
+                currLoc += 4;
+                //push back test
+                previousCommand = user_input.substr(pre, currLoc - pre);
+                commands.push_back(buildSingleCommand(previousCommand));
+                //now pre should point to the one next to test, which is currLoc
+                pre += 4;
+                currLoc --;
+            }
+        }
+        
+        if(currLoc + 1 == user_input.size()) { //reach the end, build the last command
+            previousCommand = user_input.substr(pre, currLoc + 1 - pre);
+            if(previousCommand.size() != 0 && previousCommand != " ") {
+                commands.push_back(buildSingleCommand(previousCommand));
+            }
+        }
+        //update currLoc
+        currLoc ++;
     }
     
     return commands;
 }
 
-char** parser::buildSingleCommand(unsigned pre) {
+char** parser::buildSingleCommand(string singleCommand) {
     char** command = new char*[50];
     unsigned commandIndex = 0;
-    char* input = new char[50];
+    
+    char* input = new char[100];
     unsigned counter = 0;
     
-    for(unsigned i = pre; i < currLoc && user_input.at(i) != '\0'; i++) {
-        input[counter] = user_input.at(i);
+    for(unsigned i = 0; i < singleCommand.size() ; i++) {
+        input[counter] = singleCommand.at(i);
         counter ++;
     }
     input[counter] = '\0';
     
-    char* parsed = new char[50];
+    char* parsed = new char[100];
     parsed = strtok(input," ");
     while(parsed != NULL) {
         command[commandIndex] = parsed;

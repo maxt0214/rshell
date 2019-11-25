@@ -26,5 +26,16 @@ ADD_EXECUTABLE(rshell
     src/main.cpp
 )
 
+ADD_EXECUTABLE(integration_test
+    prototype/parser.cpp
+    src/CNT.cpp
+    src/SEMI.cpp
+    src/OR.cpp
+    src/AND.cpp
+    src/CMD.cpp
+    src/Exit.cpp
+    integration_tests/integration_test.cpp
+)
+
 TARGET_LINK_LIBRARIES(test gtest)
 TARGET_COMPILE_DEFINITIONS(test PRIVATE gtest_disable_pthreads=ON)

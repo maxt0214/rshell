@@ -18,29 +18,25 @@ int searchParenthesis(vector<char**> commands, unsigned start);
 int main() {
     string userInput;
     
-    do {
-        //prompt the user and get the input
-        cout << "$ ";
-        getline(cin, userInput);
-        //set up the parsed commands
-        parser parsedInput(userInput);
-        vector<char**> commands = parsedInput.parse();
-        
-        //check if no commands input by user
-        if(commands.size() != 0) {
-            //Set up the commands and execute
-            Base* executableCommand = GenerateCommands(commands, 0, commands.size()-1);
-            if(executableCommand == NULL) {
-                cout << "Syntax Error!" << endl;
-            } else {
-                executableCommand->Execute();
-            }
-            //free memories
-            for(unsigned i = 0; i < commands.size(); i++) {
-                delete[] commands.at(i);
-            }
+    getline(cin,userInput);
+    
+    parser parsedInput(userInput);
+    vector<char**> commands = parsedInput.parse();
+    
+    //check if no commands input by user
+    if(commands.size() != 0) {
+        //Set up the commands and execute
+        Base* executableCommand = GenerateCommands(commands, 0, commands.size()-1);
+        if(executableCommand == NULL) {
+            cout << "Syntax Error!" << endl;
+        } else {
+            executableCommand->Execute();
         }
-    } while(!cin.fail());
+        //free memories
+        for(unsigned i = 0; i < commands.size(); i++) {
+            delete[] commands.at(i);
+        }
+    }
 }
 
 Base* GenerateSingleCommand(vector<char**> commands, int& currLoc, int end) {
@@ -61,14 +57,7 @@ Base* GenerateSingleCommand(vector<char**> commands, int& currLoc, int end) {
         //update currLoc
         currLoc = final;
     } else if(temp == "[") {//search for ] to continue
-        if(currLoc + 2 <= end) {//still have at least two more command behind
-            
-            if(currCommand)
-        } else if(currLoc + 1 <= end) {
-            
-        } else {
-            
-        }
+        
     } else if(temp == "]" && temp == ")" || temp == "&&" || temp == "||" || temp == ";") {//syntax error
         return NULL;
     } else if(temp == "test") {

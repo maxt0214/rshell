@@ -12,7 +12,7 @@ class parser {
         parser(std::string user_input) { this->currLoc = 0; this->user_input = user_input; }
         std::vector<char**> parse();
     public:
-        char** buildSingleCommand(unsigned pre);
+        char** buildSingleCommand(std::string singleCommand);
 };
 
 #endif

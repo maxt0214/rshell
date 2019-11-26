@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -31,6 +32,28 @@ std::vector<char**> parser::parse() {
                 commands.push_back(buildSingleCommand(previousCommand));
             }
             return commands;
+        }
+        
+        if(user_input.at(currLoc) == '"') {//deal with ""
+            int notFound = currLoc;
+            for(unsigned i = currLoc+1; i < user_input.size(); i++) {
+                if(user_input.at(i) == '"') {
+                    currLoc = i;
+                }
+            }
+            
+            if(currLoc != notFound) {//found
+                string quotes = user_input.substr(pre, currLoc + 1 - pre);
+                quotes.erase(remove(quotes.begin(),quotes.end(),'"') , quotes.end());
+                if(quotes.size() != 0 && quotes != " ") {
+                    commands.push_back(buildSingleCommand(quotes));
+                }
+            } else { //not found, error
+                commands.push_back(NULL);
+                return commands;
+            }
+            
+            pre = currLoc + 1;
         }
         
         if(user_input.at(currLoc) == ';' || user_input.at(currLoc) == '(' || user_input.at(currLoc) == ')' || 

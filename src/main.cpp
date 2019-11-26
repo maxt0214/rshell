@@ -5,6 +5,7 @@
 #include "../header/AND.h"
 #include "../header/OR.h"
 #include "../header/SEMI.h"
+#include "../header/Test.h"
 
 #include <string>
 #include <vector>
@@ -61,30 +62,29 @@ Base* GenerateSingleCommand(vector<char**> commands, int& currLoc, int end) {
         //update currLoc
         currLoc = final;
     } else if(temp == "[") {//search for ] to continue
-        if(currLoc + 2 <= end) {//still have at least two more command behind
-            
-            if(currCommand)
-        } else if(currLoc + 1 <= end) {
-            
+        
+        if(currLoc + 2 <= end) {// [ something ]
+            string checkBracket = commands.at(currLoc+2)[0];
+            if(checkBracket == "]") {
+                char** testCommand = commands.at(currLoc+1);
+                curr = new TestCmd(testCommand);
+            } else {
+                return NULL;
+            }
         } else {
-            
+            return NULL;
         }
+        currLoc += 2;
     } else if(temp == "]" && temp == ")" || temp == "&&" || temp == "||" || temp == ";") {//syntax error
         return NULL;
     } else if(temp == "test") {
         
         if(currLoc + 1 > end) {//only contains a "test"
-            
+            return NULL;
         } else {//have something other than "test"
             currLoc ++; //discard test
             currCommand = commands.at(currLoc);
-            temp = currCommand[0];
-            
-            if(temp == "&&" || temp == "||" || temp == ";") {// input is: test && || ; ...
-                
-            } else {// input is: test ...
-                
-            }
+            curr = new TestCmd(currCommand);
         }
         
     } else if(temp == "exit") {

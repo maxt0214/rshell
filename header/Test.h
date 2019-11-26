@@ -1,19 +1,19 @@
 #ifndef _TEST_H_
 #define _TEST_H_
 
-#include "CMD.h"
+#include "Base.hpp"
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/stat.h>
 
-class Test : public Command{
+class TestCmd : public Base {
     protected:
-        char* flag;
-        string& filePath;
+        char flag;
+        char* filePath;
 
     public:
-        Test(char** pathDirectory);
-        bool Execute();
+        TestCmd(char** pathDirectory);
+        virtual pid_t Execute();
 };
 
 #endif

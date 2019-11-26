@@ -47,6 +47,11 @@ int main() {
 Base* GenerateSingleCommand(vector<char**> commands, int& currLoc, int end) {
     Base* curr;
     char** currCommand = commands.at(currLoc);
+    
+    if(currCommand == NULL) {
+        return NULL;
+    }
+    
     string temp = currCommand[0];
     
     if(temp == "(") {//search for ) to continue
@@ -105,7 +110,6 @@ Base* GenerateCommands(vector<char**> commands, int start, int end) {
     lf = GenerateSingleCommand(commands, currLoc, end);
     
     while(currLoc <= end) {//if executed, currLoc now should point to the middle connector
-        
         if(currLoc + 1 > end) {//check if there is a right command
             return NULL;
         }

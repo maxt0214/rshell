@@ -35,6 +35,20 @@
 
   - Furthermore, our EXIT class will contain procedures among execution that will ensure that the command queue is empty and that there are no other commands being prompted after it. Shortly afterward, the command will execute and exit the shell. 
 
+4.*Test:*
+  - Our test command class currently allows the user to detect whether a file/directory exists with additional features using specific flags to do so, and uses the sys/stat library in order to verify the existence of certain files and data paths. The current flags correspond with each following operation:
+
+ - -e	checks if the file/directory exists
+ - -f	checks if the file/directory exists and is a regular file
+ - -d	checks if the file/directory exists and is a directory
+
+ - After the execution of the test command, the Terminal will output a boolean value (true) or (false) depending on the existence of the directory/file and flag being used. Additionally the shell allows for the use of brackets [] to operate a command as such: 
+
+ - $ test -e test/file/path  - or -  $ [ -e test/file/path ]
+
+ - Executing the test command without a flag will automatically set the flag to -e. 
+
+
 **Prototype**
 
 - Our prototype folder contains two parts, prototype functions to test execvp(), fork(), and waitpid(), and parser class to output a vector of  commands and connectors, ex: {command1, connector, command2, etc}. Commands and connectors are implemented as arrays of c-string. One single command could be {“ls”, ”-a”, “-l”}. Connector are implemented such as {“;”}, which only contain one string of connector. 
@@ -202,19 +216,19 @@ int main() {
 ```
 **Development and Testing Roadmap**
 
-1. [ ] Base Class                                 					@maxt0214
-2. [ ] CMD Class(concurrently with connector)						@maxt0214
-3. [ ] Unit_test for CMD Class								@maxt0214
-4. [ ] Connector Class									@rlam021
-5. [ ] Unit_test for Connector Class							@rlam021
-6. [ ] Exit Class									@maxt0214
-7. [ ] Unit_test for Exit Class								@maxt0214
-8. [ ] And Class									@rlam021
-9. [ ] Unit_test for And Class								@rlam021
-10. [ ] Or Class									@rlam021
-11. [ ] Unit_test for Or Class								@rlam021
-12. [ ] Semicolon Class									@rlam021
-13. [ ] Unit_test for Semicolon Class							@rlam021
-14. [ ] Integrated Tests								@maxt0214
+1. [x] Base Class                                 					@maxt0214
+2. [x] CMD Class(concurrently with connector)						@maxt0214
+3. [x] Unit_test for CMD Class								@maxt0214
+4. [x] Connector Class									@rlam021
+5. [x] Unit_test for Connector Class							@rlam021
+6. [x] Exit Class									@maxt0214
+7. [x] Unit_test for Exit Class								@maxt0214
+8. [x] And Class									@rlam021
+9. [x] Unit_test for And Class								@rlam021
+10. [x] Or Class									@rlam021
+11. [x] Unit_test for Or Class								@rlam021
+12. [x] Semicolon Class									@rlam021
+13. [x] Unit_test for Semicolon Class							@rlam021
+14. [x] Integrated Tests								@maxt0214
 	
 

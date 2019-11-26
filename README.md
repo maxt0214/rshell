@@ -5,7 +5,7 @@
 
 **Introduction:**
 
-  - We are currently using a composite design pattern to design our shell. Our project design consists of 6 classes which inherit from an interface in order to execute certain commands and functions. From our Base interface, we have two classes Connector and Command which allow for command execution based on the arguments and executables. From our connector class we have an AND, OR, and SEMICOLON class which are used to differentiate between single and several command executions. Furthermore, our EXIT class inherits from our Command class in order to follow specific procedures before exiting our shell
+We are currently using a composite design pattern to design our shell. Our project design consists of 6 classes which inherit from an interface in order to execute certain commands and functions. From our Base interface, we have two classes Connector and Command which allow for command execution based on the arguments and executables. From our connector class we have an AND, OR, and SEMICOLON class which are used to differentiate between single and several command executions. Furthermore, our EXIT class inherits from our Command class in order to follow specific procedures before exiting our shell. We added new feature supporting changes of the procedence of command execution by seperating them using parenthesis. Ex: (ls && pwd) || (echo && echo) will treat (ls && pwd) as the first command and (echo && echo) as the second command
 
 
 **OMT Diagram:**
@@ -17,45 +17,45 @@
 **Classes:**
 	
 1.*Base:*
-  - Our Base class consists of a virtual execute function that will be inherited by all of our other classes. It will be used in order to support both connector and command execute functions. 
+Our Base class consists of a virtual execute function that will be inherited by all of our other classes. It will be used in order to support both connector and command execute functions. 
 
 2.*Connector:*
 
-  - Our Connector class will contain another virtual execute function that will allow for proper differentiation between a single and double command. For example, it will allow us to differentiate between calling two echo commands using a logical operator and a single command line. We will do this using a parser (code shown below) in order to compare characters and execute certain commands. 
+Our Connector class will contain another virtual execute function that will allow for proper differentiation between a single and double command. For example, it will allow us to differentiate between calling two echo commands using a logical operator and a single command line. We will do this using a parser (code shown below) in order to compare characters and execute certain commands. 
 
-  - Our AND class will only execute the right hand side command if the left hand side operator executes on through the parser. Furthermore, if the left hand side operator fails, either a flag will be set and an error will be output.
+Our AND class will only execute the right hand side command if the left hand side operator executes on through the parser. Furthermore, if the left hand side operator fails, either a flag will be set and an error will be output.
 
-  - Our OR class will execute the right hand side command if the left hand side operator fails to do so. 
+Our OR class will execute the right hand side command if the left hand side operator fails to do so. 
 
-  - The Semicolon will allow for execution regardless of the use of an AND or OR, allowing for execution of multiple commands at a time. 
+The Semicolon will allow for execution regardless of the use of an AND or OR, allowing for execution of multiple commands at a time. 
 
 3.*Command:*
 	
-  - Our Command Class will use a value returned from the parser in order to execute specific commands.It will allow us to use functions such as waitpid(), fork(), and execvp() as well. 
+Our Command Class will use a value returned from the parser in order to execute specific commands.It will allow us to use functions such as waitpid(), fork(), and execvp() as well. 
 
-  - Furthermore, our EXIT class will contain procedures among execution that will ensure that the command queue is empty and that there are no other commands being prompted after it. Shortly afterward, the command will execute and exit the shell. 
+Furthermore, our EXIT class will contain procedures among execution that will ensure that the command queue is empty and that there are no other commands being prompted after it. Shortly afterward, the command will execute and exit the shell. 
 
 4.*Test:*
-  - Our test command class currently allows the user to detect whether a file/directory exists with additional features using specific flags to do so, and uses the sys/stat library in order to verify the existence of certain files and data paths. The current flags correspond with each following operation:
+Our test command class currently allows the user to detect whether a file/directory exists with additional features using specific flags to do so, and uses the sys/stat library in order to verify the existence of certain files and data paths. The current flags correspond with each following operation:
 
  - -e	checks if the file/directory exists
  - -f	checks if the file/directory exists and is a regular file
  - -d	checks if the file/directory exists and is a directory
 
- - After the execution of the test command, the Terminal will output a boolean value (true) or (false) depending on the existence of the directory/file and flag being used. Additionally the shell allows for the use of brackets [] to operate a command as such: 
+After the execution of the test command, the Terminal will output a boolean value (true) or (false) depending on the existence of the directory/file and flag being used. Additionally the shell allows for the use of brackets [] to operate a command as such: 
 
- - $ test -e test/file/path  - or -  $ [ -e test/file/path ]
+ - $ test -e test/file/path	- or -	$ [ -e test/file/path ]
 
- - Executing the test command without a flag will automatically set the flag to -e. 
+ Executing the test command without a flag will automatically set the flag to -e. 
 
 
 **Prototype**
 
-- Our prototype folder contains two parts, prototype functions to test execvp(), fork(), and waitpid(), and parser class to output a vector of  commands and connectors, ex: {command1, connector, command2, etc}. Commands and connectors are implemented as arrays of c-string. One single command could be {“ls”, ”-a”, “-l”}. Connector are implemented such as {“;”}, which only contain one string of connector. 
+Our prototype folder contains two parts, prototype functions to test execvp(), fork(), and waitpid(), and parser class to output a vector of  commands and connectors, ex: {command1, connector, command2, etc}. Commands and connectors are implemented as arrays of c-string. One single command could be {“ls”, ”-a”, “-l”}. Connector are implemented such as {“;”}, which only contain one string of connector. 
 
-- For the part how we could distinguish between multiple commands in one line or single command in one line, the returned vector of c-string arrays would only contain one array if the user only input single command, and vice versa. 
+For the part how we could distinguish between multiple commands in one line or single command in one line, the returned vector of c-string arrays would only contain one array if the user only input single command, and vice versa. 
 
-- parser header:
+parser header:
 ```c++
 class parser {
 	private:
@@ -68,7 +68,7 @@ class parser {
         	char** buildSingleCommand(unsigned pre);
 };
 ```
-- parser implementation:
+parser implementation:
 ```c++
 #include "parser.h"
 
@@ -167,7 +167,7 @@ char** parser::buildSingleCommand(unsigned pre) {
     return command;
 }
 ```
-- prototype test
+prototype test
 ```c++
 #include <iostream>
 
@@ -230,5 +230,9 @@ int main() {
 12. [x] Semicolon Class									@rlam021
 13. [x] Unit_test for Semicolon Class							@rlam021
 14. [x] Integrated Tests								@maxt0214
+15. [x] Test Command Implementation							@rlam021
+16. [x] Test Command unit_test							        @rlam021
+17. [x] Precedence Feature								@maxt0214
+18. [x] Integrated Tests for test command and new precedence feature	                @maxt0214
 	
 

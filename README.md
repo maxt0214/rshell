@@ -1,7 +1,7 @@
 # CS 100 Programming Project
-- Ryan Lam, 862110744	                                                                                            		
-- Xiaotian Ma, 862094705                                                            						
-- CS100 Brian Crites - Fall 2019
+Ryan Lam, 862110744	                                                                                            		
+Xiaotian Ma, 862094705                                                            						
+CS100 Brian Crites - Fall 2019
 
 **Introduction:**
 
@@ -10,7 +10,7 @@ We are currently using a composite design pattern to design our shell. Our proje
 
 **OMT Diagram:**
 	
-  - Our OMT diagram shows how we build composite pattern using multiple classes inherited from base class
+Our OMT diagram shows how we build composite pattern using multiple classes inherited from base class
 
 ![OMT Diagram](https://github.com/cs100/assignment-a1w_alums/blob/master/Images/Assignment%201%20UML.png?raw=true)
 

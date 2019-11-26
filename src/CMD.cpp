@@ -21,7 +21,7 @@ pid_t Command::Execute() {
     c_pid = fork();
     if(c_pid == 0) {//child process
         execvp(command[0],command);
-        cout << "$ Command not found" << endl;//print only if execution fails
+        cout << "! Command not found" << endl;//print only if execution fails
         exit(1); //pass the flag that execution failed to the parent process
     } 
     if(c_pid > 0) {//parent process

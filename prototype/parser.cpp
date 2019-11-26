@@ -73,9 +73,9 @@ std::vector<char**> parser::parse() {
             }
         }
         
-        if(currLoc + 3 < user_input.size()) {//check if out of bound
+        if(currLoc + 4 < user_input.size()) {//check if out of bound
             if(user_input.at(currLoc) == 't' && user_input.at(currLoc+1) == 'e' &&
-               user_input.at(currLoc+2) == 's' && user_input.at(currLoc+3) == 't') { //command test
+               user_input.at(currLoc+2) == 's' && user_input.at(currLoc+3) == 't' && user_input.at(currLoc+4) == ' ') { //command test
            
                 //push back the previous command
                 previousCommand = user_input.substr(pre, currLoc - pre);

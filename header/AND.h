@@ -7,7 +7,7 @@ class AND : public Connector{
 	public:
 		AND(Base* lf, Base* rt);
 	    virtual pid_t Execute();
-
+	    virtual void fdModifier(int newFdIn, int newFdOut);
 };
 
 #endif

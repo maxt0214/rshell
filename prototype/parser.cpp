@@ -56,28 +56,110 @@ std::vector<char**> parser::parse() {
             pre = currLoc + 1;
         }
         
-        if(user_input.at(currLoc) == ';' || user_input.at(currLoc) == '(' || user_input.at(currLoc) == ')' || 
-           user_input.at(currLoc) == '[' || user_input.at(currLoc) == ']') { //connector ; ( ) or test command []
-            
-            //push back the previous command
-            previousCommand = user_input.substr(pre, currLoc - pre);
-            if(previousCommand.size() != 0 && previousCommand != " ") {
+        if(user_input.at(currLoc) == '>') {
+            if(currLoc + 1 >= user_input.size()) {
+                //push back the previous command
+                previousCommand = user_input.substr(pre, currLoc - pre);
+                if(previousCommand.size() != 0 && previousCommand != " ") {
+                    commands.push_back(buildSingleCommand(previousCommand));
+                }
+                //move two counters: now pre should be pointing to ;()[] and currLoc should point to the one next to ;()[]
+                pre = currLoc;
+                currLoc ++;
+                //push back ';'
+                previousCommand = user_input.substr(pre, currLoc - pre);
                 commands.push_back(buildSingleCommand(previousCommand));
+                //now pre should point to the one next to ;()[], which is currLoc
+                pre ++;
+                currLoc --;
+            } else {
+                if(user_input.at(currLoc+1) == '>') {
+                    //push back the previous command
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    if(previousCommand.size() != 0 && previousCommand != " ") {
+                        commands.push_back(buildSingleCommand(previousCommand));
+                    }
+                    //move two counters: now pre should be pointing to first & and currLoc should point to the one next to &&
+                    pre = currLoc;
+                    currLoc += 2;
+                    //push back &&
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    commands.push_back(buildSingleCommand(previousCommand));
+                    //now pre should point to the one next to &&, which is currLoc
+                    pre += 2;
+                    currLoc --;
+                } else {
+                    //push back the previous command
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    if(previousCommand.size() != 0 && previousCommand != " ") {
+                        commands.push_back(buildSingleCommand(previousCommand));
+                    }
+                    //move two counters: now pre should be pointing to ;()[] and currLoc should point to the one next to ;()[]
+                    pre = currLoc;
+                    currLoc ++;
+                    //push back ';'
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    commands.push_back(buildSingleCommand(previousCommand));
+                    //now pre should point to the one next to ;()[], which is currLoc
+                    pre ++;
+                    currLoc --;
+                }
             }
-            //move two counters: now pre should be pointing to ;()[] and currLoc should point to the one next to ;()[]
-            pre = currLoc;
-            currLoc ++;
-            //push back ';'
-            previousCommand = user_input.substr(pre, currLoc - pre);
-            commands.push_back(buildSingleCommand(previousCommand));
-            //now pre should point to the one next to ;()[], which is currLoc
-            pre ++;
-            currLoc --;
+        }
+        
+        if(user_input.at(currLoc) == '|') {
+            if(currLoc + 1 >= user_input.size()) {
+                //push back the previous command
+                previousCommand = user_input.substr(pre, currLoc - pre);
+                if(previousCommand.size() != 0 && previousCommand != " ") {
+                    commands.push_back(buildSingleCommand(previousCommand));
+                }
+                //move two counters: now pre should be pointing to ;()[] and currLoc should point to the one next to ;()[]
+                pre = currLoc;
+                currLoc ++;
+                //push back ';'
+                previousCommand = user_input.substr(pre, currLoc - pre);
+                commands.push_back(buildSingleCommand(previousCommand));
+                //now pre should point to the one next to ;()[], which is currLoc
+                pre ++;
+                currLoc --;
+            } else {
+                if(user_input.at(currLoc+1) == '|') {
+                    //push back the previous command
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    if(previousCommand.size() != 0 && previousCommand != " ") {
+                        commands.push_back(buildSingleCommand(previousCommand));
+                    }
+                    //move two counters: now pre should be pointing to first & and currLoc should point to the one next to &&
+                    pre = currLoc;
+                    currLoc += 2;
+                    //push back &&
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    commands.push_back(buildSingleCommand(previousCommand));
+                    //now pre should point to the one next to &&, which is currLoc
+                    pre += 2;
+                    currLoc --;
+                } else {
+                    //push back the previous command
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    if(previousCommand.size() != 0 && previousCommand != " ") {
+                        commands.push_back(buildSingleCommand(previousCommand));
+                    }
+                    //move two counters: now pre should be pointing to ;()[] and currLoc should point to the one next to ;()[]
+                    pre = currLoc;
+                    currLoc ++;
+                    //push back ';'
+                    previousCommand = user_input.substr(pre, currLoc - pre);
+                    commands.push_back(buildSingleCommand(previousCommand));
+                    //now pre should point to the one next to ;()[], which is currLoc
+                    pre ++;
+                    currLoc --;
+                }
+            }
         }
         
         if(currLoc + 1 < user_input.size()) {//check if out of bound
-            if( (user_input.at(currLoc) == '&' && user_input.at(currLoc+1) == '&') ||
-                (user_input.at(currLoc) == '|' && user_input.at(currLoc+1) == '|') ) { //connector && or ||
+            if(user_input.at(currLoc) == '&' && user_input.at(currLoc+1) == '&') { //connector && or ||
            
                 //push back the previous command
                 previousCommand = user_input.substr(pre, currLoc - pre);
@@ -94,6 +176,25 @@ std::vector<char**> parser::parse() {
                 pre += 2;
                 currLoc --;
             }
+        }
+        
+        if(user_input.at(currLoc) == ';' || user_input.at(currLoc) == '(' || user_input.at(currLoc) == ')' || 
+           user_input.at(currLoc) == '[' || user_input.at(currLoc) == ']' || user_input.at(currLoc) == '<' ) { //connector ; ( ) or test command []
+            
+            //push back the previous command
+            previousCommand = user_input.substr(pre, currLoc - pre);
+            if(previousCommand.size() != 0 && previousCommand != " ") {
+                commands.push_back(buildSingleCommand(previousCommand));
+            }
+            //move two counters: now pre should be pointing to ;()[] and currLoc should point to the one next to ;()[]
+            pre = currLoc;
+            currLoc ++;
+            //push back ';'
+            previousCommand = user_input.substr(pre, currLoc - pre);
+            commands.push_back(buildSingleCommand(previousCommand));
+            //now pre should point to the one next to ;()[], which is currLoc
+            pre ++;
+            currLoc --;
         }
         
         if(currLoc + 4 < user_input.size()) {//check if out of bound

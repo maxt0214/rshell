@@ -10,6 +10,7 @@ class OR : public Connector{
 	public:
 		OR(Base* lf,Base* rf);
 	    virtual pid_t Execute();
+	    virtual void fdModifier(int newFdIn, int newFdOut);
 
 };
 

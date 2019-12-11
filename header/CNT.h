@@ -8,7 +8,6 @@
 
 
 class Connector : public Base {
-
 	protected:
 		Base* childLeft;
 		Base* childRight;
@@ -16,6 +15,7 @@ class Connector : public Base {
 	public:
 		Connector(Base* leftChild, Base* rightChild);
 		virtual pid_t Execute() = 0;
+		virtual void fdModifier(int newFdIn, int newFdOut) = 0;
 
 };
 

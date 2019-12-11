@@ -24,3 +24,12 @@ pid_t Exit::Execute() {
     
     return Command::Execute();
 }
+
+void Exit::fdModifier(int newFdIn, int newFdOut){
+    if(newFdIn != -1) {
+		this -> fdIn = newFdIn;
+	}
+	if(newFdOut != -1) {
+		this -> fdOut = newFdOut;
+	}
+}

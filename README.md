@@ -234,5 +234,9 @@ int main() {
 16. [x] Test Command unit_test							        @rlam021
 17. [x] Precedence Feature								@maxt0214
 18. [x] Integrated Tests for test command and new precedence feature	                @maxt0214
+19. [x] Pipe Class          								@rlam021
+20. [x] CMD Class Update for I/O Redirection						@rlam021
+21. [x] Unit tests for pipe and I/O redirection						@maxt0214
+22. [x] Integrated tests for pipe and redirection					@maxt0214
 	
 

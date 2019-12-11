@@ -13,6 +13,7 @@ ADD_EXECUTABLE(test
     src/CMD.cpp
     src/Exit.cpp
     src/Test.cpp
+    src/pipe.cpp
     unit_tests/Unit_Test.cpp
 )
 
@@ -25,6 +26,7 @@ ADD_EXECUTABLE(rshell
     src/CMD.cpp
     src/Exit.cpp
     src/Test.cpp
+    src/pipe.cpp
     src/main.cpp
 )
 
@@ -37,6 +39,7 @@ ADD_EXECUTABLE(integration_test
     src/CMD.cpp
     src/Exit.cpp
     src/Test.cpp
+    src/pipe.cpp
     integration_tests/integration_test.cpp
 )
 

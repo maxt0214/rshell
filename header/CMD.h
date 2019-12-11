@@ -12,6 +12,7 @@ class Command : public Base {
     public:
         Command(char** user_Command);
         virtual pid_t Execute();
+        virtual void fdModifier(int newFdIn, int newFdOut);
 };
 
 #endif

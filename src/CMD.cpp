@@ -20,9 +20,25 @@ pid_t Command::Execute() {
     
     c_pid = fork();
     if(c_pid == 0) {//child process
-        execvp(command[0],command);
-        cout << "! Command not found" << endl;//print only if execution fails
-        exit(1); //pass the flag that execution failed to the parent process
+
+        if(fdIn != -1){
+            if(dup2(fdIn,0) == -1) {
+                perror("dup2 fdIn");
+                return -1;
+            }
+        }
+
+        if(fdOut != -1){
+            if(dup2(fdOut,1) == -1) {
+                perror("dup2 fdIn");
+                return -1;
+            }
+        }
+        
+        if (execvp(command[0],command) == -1) { //if anything goes wrong
+            perror("! Command not found");
+            exit(1); //pass the flag that execution failed to the parent process
+        }
     } 
     if(c_pid > 0) {//parent process
         waitpid(c_pid, &status, WUNTRACED);
@@ -35,4 +51,13 @@ pid_t Command::Execute() {
         return -1;
     }
     return c_pid;
+}
+
+void Command::fdModifier(int newFdIn, int newFdOut){
+    if(newFdIn != -1) {
+		this -> fdIn = newFdIn;
+	}
+	if(newFdOut != -1) {
+		this -> fdOut = newFdOut;
+	}
 }

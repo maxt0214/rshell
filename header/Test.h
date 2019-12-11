@@ -14,6 +14,7 @@ class TestCmd : public Base {
     public:
         TestCmd(char** pathDirectory);
         virtual pid_t Execute();
+        virtual void fdModifier(int newFdIn, int newFdOut);
 };
 
 #endif

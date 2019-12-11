@@ -69,10 +69,4 @@ TEST(CommandExecutionTests, Command_Comment_Test) {
 	ASSERT_TRUE(singleCommand->Execute() > 0);
 }
 
-TEST(CommandExecutionTests, Command_OnlyComment_Test) {
-    parser userCommand("#ssh");
-    Command* singleCommand = new Command(userCommand.parse().at(0));
-	ASSERT_TRUE(singleCommand->Execute() > 0);
-}
-
 #endif

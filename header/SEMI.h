@@ -7,6 +7,7 @@ class SEMI : public Connector{
 	public:
 		SEMI(Base* lf,Base* rf);
 	    virtual pid_t Execute();
+	    virtual void fdModifier(int newFdIn, int newFdOut);
 };
 
 #endif

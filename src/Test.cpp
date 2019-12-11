@@ -36,6 +36,18 @@ pid_t TestCmd::Execute(){
 
 	struct stat buf;
 
+	if(fdIn != -1){
+
+            dup2(fdIn,0);
+
+        }
+
+        if(fdOut != -1){
+
+            dup2(fdOut,1);
+
+        }
+
 	if(flag == 'e'){
     	if(stat(filePath, &buf) == 0) {
     		cout << "(True)" << endl;
@@ -89,6 +101,14 @@ pid_t TestCmd::Execute(){
 	}
 }
 
+void TestCmd::fdModifier(int newFdIn, int newFdOut){
+	if(newFdIn != -1) {
+		this -> fdIn = newFdIn;
+	}
+	if(newFdOut != -1) {
+		this -> fdOut = newFdOut;
+	}
+}
 
 
 

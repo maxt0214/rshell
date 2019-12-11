@@ -6,9 +6,14 @@
 #include "../header/OR.h"
 #include "../header/SEMI.h"
 #include "../header/Test.h"
+#include "../header/pipe.h"
 
 #include <string>
+#include<stdio.h> 
+#include <unistd.h> 
+#include <fcntl.h> 
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -44,6 +49,11 @@ int main() {
 Base* GenerateSingleCommand(vector<char**> commands, int& currLoc, int end) {
     Base* curr;
     char** currCommand = commands.at(currLoc);
+    
+    if(currCommand == NULL) {
+        return NULL;
+    }
+    
     string temp = currCommand[0];
     
     if(temp == "(") {//search for ) to continue
@@ -89,8 +99,73 @@ Base* GenerateSingleCommand(vector<char**> commands, int& currLoc, int end) {
     } else {//normal command
         curr = new Command(currCommand);
     }
-    //update currLoc
+    //update currLoc to the command after the previous constructed one
     currLoc ++;
+    
+    
+    //check if any redirection
+    if(currLoc >= commands.size()) { //check if any more commands
+        temp = "";
+    } else {
+        temp = commands.at(currLoc)[0];
+    }
+    
+    while(temp == ">>" || temp == "<" || temp == ">") {
+        if(temp == ">>") {
+            if(currLoc+1 >= commands.size()) { //nothing after >> or >
+                return NULL;
+            }
+            char* fileName = commands.at(currLoc+1)[0];
+            
+            int fds = open(fileName, O_WRONLY | O_APPEND);
+            if(fds < 0) { //not exsited
+                string filename = fileName;
+                ofstream newFile(filename);
+                newFile.close();
+                fds = open(fileName, O_WRONLY | O_APPEND);
+            }
+            curr->fdModifier(-1,fds);
+            currLoc += 2; //jump to the command after the filename
+        }
+    
+        if(temp == ">") {
+            if(currLoc+1 >= commands.size()) { //nothing after >> or >
+                return NULL;
+            }
+            char* fileName = commands.at(currLoc+1)[0];
+            
+            string filename = fileName;
+            ofstream newFile;
+            newFile.open(fileName,std::ofstream::out | std::ofstream::trunc);
+            newFile.close();
+        
+            int fds = open(fileName, O_WRONLY | O_APPEND);
+            //change the fd of the previous command
+            curr->fdModifier(-1,fds);
+            currLoc += 2; //jump to the command after the filename
+        } 
+        
+        if(temp == "<") {
+            if(currLoc+1 >= commands.size()) { //nothing after <
+                return NULL;
+            }
+            char* fileName = commands.at(currLoc+1)[0];
+            //create new fd
+            int fds = open(fileName, O_RDONLY);
+            if(fds < 0) { //not exsited
+                cout << "File not exsited" << endl;
+                return NULL;
+            }
+            curr->fdModifier(fds,-1);
+            currLoc += 2; //jump to the command after the filename
+        }
+        //get the command after the filename to see if it's another redirection
+        if(currLoc >= commands.size()) { //check if any more commands
+             temp = "";
+        } else {
+            temp = commands.at(currLoc)[0];
+        }
+    }
     
     return curr;
 }
@@ -102,7 +177,6 @@ Base* GenerateCommands(vector<char**> commands, int start, int end) {
     lf = GenerateSingleCommand(commands, currLoc, end);
     
     while(currLoc <= end) {//if executed, currLoc now should point to the middle connector
-        
         if(currLoc + 1 > end) {//check if there is a right command
             return NULL;
         }
@@ -124,7 +198,11 @@ Base* GenerateCommands(vector<char**> commands, int start, int end) {
             currLoc ++;
             rt = GenerateSingleCommand(commands, currLoc, end);
             mid = new SEMI(lf,rt);
-        } else {//the middle connector is test, error
+        } else if(temp == "|") {
+            currLoc ++;
+            rt = GenerateSingleCommand(commands, currLoc, end);
+            mid = new Pipe(lf,rt);
+        } else {//the middle is not connector, error
             return NULL;
         }
         

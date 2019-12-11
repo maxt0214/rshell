@@ -5,7 +5,7 @@
 
 **Introduction:**
 
-We are currently using a composite design pattern to design our shell. Our project design consists of 6 classes which inherit from an interface in order to execute certain commands and functions. From our Base interface, we have two classes Connector and Command which allow for command execution based on the arguments and executables. From our connector class we have an AND, OR, and SEMICOLON class which are used to differentiate between single and several command executions. Furthermore, our EXIT class inherits from our Command class in order to follow specific procedures before exiting our shell. We added new feature supporting changes of the procedence of command execution by seperating them using parenthesis. Ex: (ls && pwd) || (echo && echo) will treat (ls && pwd) as the first command and (echo && echo) as the second command
+We are currently using a composite design pattern to design our shell. Our project design consists of 6 classes which inherit from an interface in order to execute certain commands and functions. From our Base interface, we have two classes Connector and Command which allow for command execution based on the arguments and executables. From our connector class we have an AND, OR, and SEMICOLON class which are used to differentiate between single and several command executions. Furthermore, our EXIT class inherits from our Command class in order to follow specific procedures before exiting our shell. We added new feature supporting changes of the procedence of command execution by seperating them using parenthesis. Ex: (ls && pwd) || (echo && echo) will treat (ls && pwd) as the first command and (echo && echo) as the second command. Additionally, we have reecntly added a Pipe and I/O redirection feature, which will allow for the user to use previous command output as input for the following command. Ex: cat < existingfile | sort | tr A-Z a-z > outputfile. 
 
 
 **OMT Diagram:**
@@ -17,7 +17,7 @@ Our OMT diagram shows how we build composite pattern using multiple classes inhe
 **Classes:**
 	
 1.*Base:*
-Our Base class consists of a virtual execute function that will be inherited by all of our other classes. It will be used in order to support both connector and command execute functions. 
+Our Base class consists of a virtual execute function that will be inherited by all of our other classes. It will be used in order to support both connector and command execute functions. Our Base class will also contain a pure virtual fdModifier function to allow for Input-Output redirection.
 
 2.*Connector:*
 
@@ -28,6 +28,8 @@ Our AND class will only execute the right hand side command if the left hand sid
 Our OR class will execute the right hand side command if the left hand side operator fails to do so. 
 
 The Semicolon will allow for execution regardless of the use of an AND or OR, allowing for execution of multiple commands at a time. 
+
+Lastly our pipe class will allow us to have right hand execution of a command from a left-hand command output, therefore simplifying program execution processes. 
 
 3.*Command:*
 	
